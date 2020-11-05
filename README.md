@@ -1,5 +1,9 @@
 # User directory managing app
 
+# Screenshot
+
+<img width="1426" alt="Screen Shot 2020-11-04 at 11 57 38 PM" src="https://user-images.githubusercontent.com/53624923/98213231-99be2f00-1ef9-11eb-9651-6180735b7115.png">
+
 
 ![Github license](https://img.shields.io/badge/license-None-blue.svg)
 
