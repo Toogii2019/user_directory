@@ -4,14 +4,18 @@ import $ from 'jquery';
 import Row from './Row';
 import { users } from './Users';
 import sortIcon from '../sort-button.png';
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
+
 
 export default class Table extends React.Component {
 
   state = {
     sortType: 'dsc',
     usersArray: users.results,
-    key: "first"
+    key: "first",
+    search: ""
+  }
+  onchange = e => {
+    this.setState({search: e.target.value});
   }
 
   iconStyle = {
@@ -29,12 +33,13 @@ export default class Table extends React.Component {
   }
 
   render() {
-    const {usersArray, sortType, key} = this.state;
+    const {usersArray, sortType, key, search} = this.state;
 
+    const filteredArrayOfUsers = usersArray.filter( user =>{
+      return user.name.first.toLowerCase().indexOf( search.toLowerCase()) !== -1;
+    })
 
-
-
-    const sortedArray = usersArray.sort((a, b) => {
+    const sortedArray = filteredArrayOfUsers.sort((a, b) => {
       const isReversed = (sortType === 'asc') ? 1 : -1;
 
       switch(key) {
@@ -61,26 +66,27 @@ export default class Table extends React.Component {
 
     
     return (
-      <ReactBootstrap.Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Photo</th>
-            <th>Title <button type="button" class="btn" onClick={ this.changeSort }><img name="title" src={sortIcon} style={this.iconStyle}></img></button></th>
-            <th>First Name <button type="button" class="btn" onClick={ this.changeSort }><img name="first-name" src={sortIcon} style={this.iconStyle}></img></button></th>
-            <th>Last Name <button type="button" class="btn" onClick={ this.changeSort }><img name="last-name" src={sortIcon} style={this.iconStyle}></img></button></th>
-            <th>Phone Number <button type="button" class="btn" onClick={ this.changeSort }><img name="phone" src={sortIcon} style={this.iconStyle}></img></button></th>
-            <th>Email<button type="button" class="btn" onClick={ this.changeSort }><img name="email" src={sortIcon} style={this.iconStyle}></img></button></th>
-          </tr>
-        </thead>
-        <tbody>
-
-
+      <>
+        <input type="text" placeholder="Search by first name" onChange={this.onchange}></input>
+          <ReactBootstrap.Table striped bordered hover>
+            
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Title <button type="button" class="btn" onClick={ this.changeSort }><img name="title" src={sortIcon} style={this.iconStyle}></img></button></th>
+                <th>First Name <button type="button" class="btn" onClick={ this.changeSort }><img name="first-name" src={sortIcon} style={this.iconStyle}></img></button></th>
+                <th>Last Name <button type="button" class="btn" onClick={ this.changeSort }><img name="last-name" src={sortIcon} style={this.iconStyle}></img></button></th>
+                <th>Phone Number <button type="button" class="btn" onClick={ this.changeSort }><img name="phone" src={sortIcon} style={this.iconStyle}></img></button></th>
+                <th>Email<button type="button" class="btn" onClick={ this.changeSort }><img name="email" src={sortIcon} style={this.iconStyle}></img></button></th>
+              </tr>
+            </thead>
+            <tbody>
               {sortedArray.map(user =>
               <Row user={user} />
             )}
-
-        </tbody>
-      </ReactBootstrap.Table>
+            </tbody>
+          </ReactBootstrap.Table>
+      </>
     );
   }
 }
